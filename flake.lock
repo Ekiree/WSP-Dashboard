@@ -144,6 +144,22 @@
         "type": "github"
       }
     },
+    "gunicornPackage": {
+      "locked": {
+        "lastModified": 1702868298,
+        "narHash": "sha256-ea5qulrP3imcaITKWDY6yTySYUYd6UxjgbZADh5wTJY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ca16221251951e9c6261a1a2bb4f9389038d3632",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ca16221251951e9c6261a1a2bb4f9389038d3632",
+        "type": "github"
+      }
+    },
     "mysqlclientPackage": {
       "locked": {
         "lastModified": 1704008649,
@@ -162,16 +178,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1712963716,
-        "narHash": "sha256-WKm9CvgCldeIVvRz87iOMi8CFVB1apJlkUT4GGvA0iM=",
+        "lastModified": 1717179513,
+        "narHash": "sha256-vboIEwIQojofItm2xGCdZCzW96U85l9nDW3ifMuAIdM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "cfd6b5fc90b15709b780a5a1619695a88505a176",
+        "rev": "63dacb46bf939521bdc93981b4cbb7ecb58427a0",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-unstable",
+        "ref": "24.05",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -283,6 +299,7 @@
         "djangoLocalflavorPackage": "djangoLocalflavorPackage",
         "djangoPackage": "djangoPackage",
         "djangoPhoneNumberFieldPackage": "djangoPhoneNumberFieldPackage",
+        "gunicornPackage": "gunicornPackage",
         "mysqlclientPackage": "mysqlclientPackage",
         "nixpkgs": "nixpkgs",
         "phonenumbersPackage": "phonenumbersPackage",
