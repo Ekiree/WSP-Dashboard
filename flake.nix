@@ -61,7 +61,6 @@
                 inputs.djangoExtentionsPackage.legacyPackages.${system}.python310Packages.django-extensions
                 inputs.werkzeugPackage.legacyPackages.${system}.python310Packages.werkzeug
                 inputs.pyOpenSSLPackage.legacyPackages.${system}.python310Packages.pyopenssl
-                inputs.gunicornPackage.legacyPackages.${system}.python310Packages.gunicorn
             ];
 
 
