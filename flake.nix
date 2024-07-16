@@ -26,8 +26,6 @@
         pytzPackage.url = "github:nixos/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9";
         reportlabPackage.url = "github:nixos/nixpkgs/fd04bea4cbf76f86f244b9e2549fca066db8ddff";
         djangoExtentionsPackage.url = "github:nixos/nixpkgs/20bc93ca7b2158ebc99b8cef987a2173a81cde35";
-        werkzeugPackage.url = "github:nixos/nixpkgs/517501bcf14ae6ec47efd6a17dda0ca8e6d866f9";
-        pyOpenSSLPackage.url = "github:nixos/nixpkgs/807c549feabce7eddbf259dbdcec9e0600a0660d";
     };
 
     outputs = { self, nixpkgs,  utils, ... }@inputs: 
@@ -59,8 +57,6 @@
                 inputs.pytzPackage.legacyPackages.${system}.python310Packages.pytz
                 inputs.reportlabPackage.legacyPackages.${system}.python310Packages.reportlab
                 inputs.djangoExtentionsPackage.legacyPackages.${system}.python310Packages.django-extensions
-                inputs.werkzeugPackage.legacyPackages.${system}.python310Packages.werkzeug
-                inputs.pyOpenSSLPackage.legacyPackages.${system}.python310Packages.pyopenssl
             ];
 
 
@@ -81,25 +77,13 @@
                 echo "Development Shell Initialized"
             '';
         }; 
-
-        # Production Package Configuration
+        
+        # Production Derivation COnfiguration
         packages.${system}.default = pkgs.stdenv.mkDerivation {
-
-            # Package name
-            name = "WSP-Dashboard" ;
-            version = "1.0";
-            
-            # Location of the source files
+            name = "WSP-Dashboard";
             src = ./src;
 
-            # Links to the direcotry in the nix store
-            output = [ "out" ];
-
-            
-            # Packages needed by dashboard
-            buildInpunts = [
-                pkgs.sops
-                pkgs.jq
+            buildInpus = [
 
                 inputs.python310Package.legacyPackages.${system}.python310
                 inputs.bablePackage.legacyPackages.${system}.python310Packages.Babel
@@ -117,24 +101,8 @@
                 inputs.pytzPackage.legacyPackages.${system}.python310Packages.pytz
                 inputs.reportlabPackage.legacyPackages.${system}.python310Packages.reportlab
                 inputs.djangoExtentionsPackage.legacyPackages.${system}.python310Packages.django-extensions
-                inputs.werkzeugPackage.legacyPackages.${system}.python310Packages.werkzeug
-                inputs.pyOpenSSLPackage.legacyPackages.${system}.python310Packages.pyopenssl
                 inputs.gunicornPackage.legacyPackages.${system}.python310Packages.gunicorn
             ];
-            
-            # Script to initialise dashboard
-            buildPhase = ''
-                export POETFOLIO_SECRET_KEY=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_secret_key)
-                export POETFOLIO_PRODUCTION=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_production)
-                export POETFOLIO_DB_NAME=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_db_name)
-                export POETFOLIO_DB_USER=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_db_user)
-                export POETFOLIO_DB_PASSWORD=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_db_password)
-                export POETFOLIO_STATIC=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_static)
-                export POETFOLIO_MEDIA=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_media)
-                export POETFOLIO_EMAIL_HOST=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_email_host)
-                export POETFOLIO_EMAIL_USER=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_email_user)
-                export POETFOLIO_EMAIL_PASSWORD=$(sops  --decrypt secrets/secrets.json | jq -r .poetfolio_email_password)
-           '';
         };
     };
 }
