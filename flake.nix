@@ -52,11 +52,16 @@
                 );
             in
             {
-                # Shell for app dependencies.
-                #
-                #     nix develop
-                #
-                # Use this shell for developing Dashboard
+                # Production Packages
+                packages = {
+                    wsp-dashboard = mkPoetryApplication { 
+                        projectDir = self; 
+                        overrides = p2n-overrides;
+                    };
+                    default = self.packages.${system}.wsp-dashboard;
+                };
+
+                # Development shell 
                 devShells.default = pkgs.mkShell { 
                     packages = [
                         pkgs.python311
