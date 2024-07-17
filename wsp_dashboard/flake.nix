@@ -27,10 +27,10 @@
                 ;
                
                 # Configure production pyton application
-                dashboard = mkPoetryApplication {
-                    projectDir = self;
-                    src = ./src;
-                };
+                # dashboard = mkPoetryApplication {
+                #     projectDir = self;
+                #     overrides = p2n-overrides;
+                # };
                 
                 # Configure development environment
                 pythonEnv = mkPoetryEnv {
@@ -61,6 +61,19 @@
                     default = self.packages.${system}.wsp-dashboard;
                 };
 
+                # # Production Application
+                # apps.default = {
+                #     type = "app";
+
+                #     packages = [
+                #         pkgs. python311
+                #         pythonEnv 
+                #     ];
+
+                #     program = "${dashboard}/bin/start_server";
+                    
+                # };
+
                 # Development shell 
                 devShells.default = pkgs.mkShell { 
                     packages = [
@@ -89,18 +102,5 @@
                         echo "Development Shell Initialized"
                     '';
                 }; 
-
-                # Production Application
-                apps.default = {
-                    type = "app";
-
-                    packages = [
-                        pkgs. python311
-                        pythonEnv 
-                    ];
-
-                    program = "${dashboard}/bin/<script>";
-                    
-                };
             });
 }

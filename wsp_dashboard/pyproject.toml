@@ -28,5 +28,4 @@ gunicorn = "^22.0.0"
 
 [build-system]
 requires = ["poetry-core"]
-#requires = ["setuptools", "poetry-core", "wheel" ]
 build-backend = "poetry.core.masonry.api"
