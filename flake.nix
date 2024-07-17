@@ -25,7 +25,20 @@
                     mkPoetryEnv
                     defaultPoetryOverrides
                 ;
-
+               
+                # Configure production pyton application
+                dashboard = mkPoetryApplication {
+                    projectDir = self;
+                    src = ./src;
+                };
+                
+                # Configure development environment
+                pythonEnv = mkPoetryEnv {
+                  projectDir = self;
+                  overrides = p2n-overrides;
+                };
+                
+                # Configure setuptools dependecy for certain packages
                 pypkgs-build-requirements = {
                     django-localflavor = [ "setuptools" ];
                 };
@@ -37,11 +50,6 @@
                     })
                   ) pypkgs-build-requirements
                 );
-
-                pythonEnv = mkPoetryEnv {
-                  projectDir = self;
-                  overrides = p2n-overrides;
-                };
             in
             {
                 # Shell for app dependencies.
@@ -76,5 +84,18 @@
                         echo "Development Shell Initialized"
                     '';
                 }; 
+
+                # Production Application
+                apps.default = {
+                    type = "app";
+
+                    packages = [
+                        pkgs. python311
+                        pythonEnv 
+                    ];
+
+                    program = "${dashboard}/bin/<script>";
+                    
+                };
             });
 }
