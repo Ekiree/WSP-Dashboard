@@ -1,0 +1,12 @@
+{% extends "edbase.html" %}
+
+{% block content %}
+<div>
+<a href="{% url 'AddGoal' %}" class="btn btn-primary" style="font-size: 20px;">Create Goal</a>
+</div>
+<br>
+{% include 'ed/EDGoals.html' %}
+{% endblock content %}
+
+{% block javascript %}
+{% endblock javascript %}
