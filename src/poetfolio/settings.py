@@ -58,7 +58,6 @@ INSTALLED_APPS = [
 	'phonenumber_field',
 	'bootstrap4',
 	'ckeditor',
-	'django_extensions',
 ]
 
 MIDDLEWARE = [
