@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "wsp-dashboard"
+name = "wsp_dashboard"
 version = "0.1.0"
 description = "Course tracking software for the Whittier Scholars Program"
 authors = ["Ekiree <noah@ekiree.tech>"]
