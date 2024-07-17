@@ -16,46 +16,42 @@
     outputs = { self, nixpkgs, flake-utils, poetry2nix, ... }: 
         flake-utils.lib.eachDefaultSystem (system: 
             let
-                inherit (poetry2nix.lib.mkPoetry2Nix {inherit pkgs; }) mkPoetryApplication mkPoetryEnv defaultPoetryOverrides;
                 pkgs = nixpkgs.legacyPackages.${system};
-                system = "x86_64-linux";
-            in
-            {
-                # Production Packages
-                packages = {
-                    dashboard = mkPoetryApplication { projectDir = self; };
-                    default = self.packages.${system}.dashboard;
+                inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) 
+                    mkPoetryApplication
+                    mkPoetryEnv
+                    defaultPoetryOverrides
+                ;
 
-
+                pypkgs-build-requirements = {
+                    django-localflavor = [ "setuptools" ];
                 };
 
+                p2n-overrides = defaultPoetryOverrides.extend (self: super:
+                  builtins.mapAttrs (package: build-requirements:
+                    (builtins.getAttr package super).overridePythonAttrs (old: {
+                      buildInputs = (old.buildInputs or [ ]) ++ (builtins.map (pkg: if builtins.isString pkg then builtins.getAttr pkg super else pkg) build-requirements);
+                    })
+                  ) pypkgs-build-requirements
+                );
+
+                pythonEnv = mkPoetryEnv {
+                  projectDir = self;
+                  overrides = p2n-overrides;
+                };
+            in
+            {
                 # Shell for app dependencies.
                 #
                 #     nix develop
                 #
-                # Use this shell for developing your app.
-                devShells.${system}.default = mkPoetryEnv { 
-                    projectDir = self;
-
-                    # Overide packates to uset setuptools
-                    overrides = defaultPoetryOverrides.extend (self: super: {
-                        django-localflavor = super.django-localflavor.overridePythonAttrs
-                        (
-                            old: {
-                                buildInputs = (old.buildInputs or [ ]) ++ [ super.setuptools ];
-                            }
-                        );
-                    });
-
-                    # Packages
-                    buildInputs = [
-                        pkgs.sops
-                        pkgs.jq
+                # Use this shell for developing Dashboard
+                devShells.default = pkgs.mkShell { 
+                    packages = [
+                        pkgs.python311
                         pkgs.libmysqlclient
-                    ];
-
-                    inputsFrom = [ 
-                        self.packages.${system}.dashboard 
+                        pkgs.poetry
+                        pythonEnv
                     ];
 
                     # Command run upon shell start
