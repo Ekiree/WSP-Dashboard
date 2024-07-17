@@ -4,7 +4,10 @@
     inputs = {
         # Nix Packages
         nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-        flake-utils.url = "github:numtide/flake-utils";
+        flake-utils = {
+            url = "github:numtide/flake-utils";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
 
         #poetry2nix
         poetry2nix = {
@@ -51,6 +54,8 @@
                         pkgs.python311
                         pkgs.libmysqlclient
                         pkgs.poetry
+                        pkgs.jq
+                        pkgs.sops
                         pythonEnv
                     ];
 
@@ -71,16 +76,5 @@
                         echo "Development Shell Initialized"
                     '';
                 }; 
-
-                # Shell for poetry.
-                #
-                #     nix develop .#poetry
-                #
-                # Use this shell for changes to pyproject.toml and poetry.lock.
-                devShells.poetry = pkgs.mkShell {
-                    packages = [ 
-                        pkgs.poetry 
-                    ];
-                };
             });
 }
