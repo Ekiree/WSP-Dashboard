@@ -2,6 +2,9 @@
 secrets/secrets.json
 .sops.yaml
 
+#Results of Nix Builds
+.result/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
