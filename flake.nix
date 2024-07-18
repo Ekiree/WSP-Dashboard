@@ -20,28 +20,30 @@
         flake-utils.lib.eachDefaultSystem (system: 
             let
                 pkgs = nixpkgs.legacyPackages.${system};
+                
+                # Setting up nix2poetry
                 inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; })
                     mkPoetryApplication
                     mkPoetryEnv
                     defaultPoetryOverrides
                 ;
-
-                dashboardApp = mkPoetryApplication {
+                
+                # Configure production python application with poetry2nix
+                poetryProd = mkPoetryApplication {
                     projectDir = self;
                     overrides = p2n-overrides;
                 };
                
-                # Configure development environment
-                pythonEnv = mkPoetryEnv {
+                # Configure development python environment with poetry2nix
+                poetryDev = mkPoetryEnv {
                   projectDir = self;
                   overrides = p2n-overrides;
                 };
                 
-                # Configure setuptools dependecy for certain packages
+                # Configure build dependencies for individual python packages
                 pypkgs-build-requirements = {
                     django-localflavor = [ "setuptools" ];
                 };
-
                 p2n-overrides = defaultPoetryOverrides.extend (self: super:
                   builtins.mapAttrs (package: build-requirements:
                     (builtins.getAttr package super).overridePythonAttrs (old: {
@@ -51,8 +53,8 @@
                 );
             in
             {
-                # Production Package
-                packages.default = dashboardApp.dependencyEnv;
+                # Production Application Package
+                packages.default = poetryProd.dependencyEnv;
 
                 # Development shell 
                 devShells.default = pkgs.mkShell { 
@@ -60,7 +62,7 @@
                         pkgs.poetry
                         pkgs.jq
                         pkgs.sops
-                        pythonEnv
+                        poetryDev
                     ];
 
                     # Command run upon shell start
@@ -77,7 +79,6 @@
                         export POETFOLIO_EMAIL_PASSWORD=$(sops  --decrypt ./secrets/secrets.json | jq -r .poetfolio_email_password)
 
                         export PS1="\n(develop)\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\] "
-                        echo "Development Shell Initialized"
                     '';
                 }; 
             });
