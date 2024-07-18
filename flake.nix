@@ -57,7 +57,6 @@
                 # Development shell 
                 devShells.default = pkgs.mkShell { 
                     packages = [
-                        pkgs.libmysqlclient
                         pkgs.poetry
                         pkgs.jq
                         pkgs.sops
