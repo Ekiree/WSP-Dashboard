@@ -20,11 +20,16 @@
         flake-utils.lib.eachDefaultSystem (system: 
             let
                 pkgs = nixpkgs.legacyPackages.${system};
-                inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) 
+                inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; })
                     mkPoetryApplication
                     mkPoetryEnv
                     defaultPoetryOverrides
                 ;
+
+                dashboardApp = mkPoetryApplication {
+                    projectDir = self;
+                    overrides = p2n-overrides;
+                };
                
                 # Configure development environment
                 pythonEnv = mkPoetryEnv {
@@ -46,19 +51,12 @@
                 );
             in
             {
-                # Production Packages
-                packages = {
-                    wsp-dashboard = mkPoetryApplication { 
-                        projectDir = self; 
-                        overrides = p2n-overrides;
-                    };
-                    default = self.packages.${system}.wsp-dashboard;
-                };
+                # Production Package
+                packages.default = dashboardApp.dependencyEnv;
 
                 # Development shell 
                 devShells.default = pkgs.mkShell { 
                     packages = [
-                        pkgs.python311
                         pkgs.libmysqlclient
                         pkgs.poetry
                         pkgs.jq
