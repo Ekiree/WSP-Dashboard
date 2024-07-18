@@ -108,6 +108,7 @@ WSGI_APPLICATION = 'poetfolio.wsgi.application'
 DB_NAME = os.environ.get('POETFOLIO_DB_NAME') or 'poetfolio_dev'
 DB_USER = os.environ.get('POETFOLIO_DB_USER') or 'poetfolio'
 DB_PASSWORD = os.environ.get('POETFOLIO_DB_PASSWORD') or 'devdevdev'
+DB_HOST = os.environ.get('POETFOLIO_DB_HOST') or 'localhost'
 
 DATABASES = {
 	'default': {
@@ -115,7 +116,7 @@ DATABASES = {
     	'NAME': DB_NAME,
     	'USER': DB_USER,
     	'PASSWORD': DB_PASSWORD,
-    	'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+    	'HOST': 'DB_HOST',
     	'PORT': '3306',
     	'TEST': {
         	'NAME': 'test_poetfolio',
