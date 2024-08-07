@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
 	'django.contrib.staticfiles',
 	#'django.static.jquery',
 	'phonenumber_field',
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
@@ -166,6 +168,9 @@ username = getpass.getuser()
 STATIC_URL = '/static/'
 STATIC_ROOT = os.environ.get('POETFOLIO_STATIC') or (
           	'/home/' + username + '/static')
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+WHITENOISE_INDEX_FILE = "True"
 
 # media files
 MEDIA_ROOT = os.environ.get('POETFOLIO_MEDIA') or (
