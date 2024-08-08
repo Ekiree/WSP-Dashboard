@@ -162,9 +162,9 @@ USE_TZ = True
 
 
 # Static and Media Files
-USE_S3 = os.environ.get("USE_S3") == False
+USE_S3 = os.environ.get("USE_S3") == 'TRUE'
 
-if USE_S3 == True:
+if USE_S3:
     MEDIA_CONFIG = {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
