@@ -161,21 +161,46 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Static and Media Files
+USE_S3 = os.environ.get("USE_S3") == False
+
+if USE_S3 == True:
+    MEDIA_CONFIG = {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": os.environ.get("S3_BUCKET_NAME"),
+            "default_acl": "private",
+            "signature_version": "s3v4",
+            "endpoint_url": os.environ.get("S3_BUCKET_ENDPOINT"),
+            "access_key": os.environ.get("S3_ACCESS_KEY"),
+            "secret_key": os.environ.get("S3_SECRET_KEY"),
+        }
+    }
+else:
+    MEDIA_CONFIG = {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    }
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
+# https://https://whitenoise.readthedocs.io/en/latest/django.html
 import getpass
 username = getpass.getuser()
 STATIC_URL = '/static/'
 STATIC_ROOT = os.environ.get('POETFOLIO_STATIC') or (
-          	'/home/' + username + '/static')
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+           	'/home/' + username + '/static')
 WHITENOISE_INDEX_FILE = "True"
 
-# media files
+# Default Media Files
 MEDIA_ROOT = os.environ.get('POETFOLIO_MEDIA') or (
          	'/home/' + username + '/media')
 MEDIA_URL = '/media/'
+
+STORAGES = {
+    "default": MEDIA_CONFIG,
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # login/logout
 LOGIN_REDIRECT_URL = '/'
