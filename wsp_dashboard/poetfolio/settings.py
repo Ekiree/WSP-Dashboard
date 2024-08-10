@@ -185,15 +185,18 @@ else:
 # https://https://whitenoise.readthedocs.io/en/latest/django.html
 import getpass
 username = getpass.getuser()
+# Location of static files within applications in Django source code
 STATIC_URL = '/static/'
-STATIC_ROOT = os.environ.get('POETFOLIO_STATIC') or (
-           	'/home/' + username + '/static')
+# Location of static files the server should pull from while running
+STATIC_ROOT = os.environ.get('POETFOLIO_STATIC') or '/srv/static'
 WHITENOISE_INDEX_FILE = "True"
 
 # Default Media Files
+# Location of media files within appllications  in Django source Code
+MEDIA_URL = '/media/'
+# Location of media files the server should pull from while running
 MEDIA_ROOT = os.environ.get('POETFOLIO_MEDIA') or (
          	'/home/' + username + '/media')
-MEDIA_URL = '/media/'
 
 STORAGES = {
     "default": MEDIA_CONFIG,
